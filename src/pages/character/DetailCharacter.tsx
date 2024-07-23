@@ -4,8 +4,11 @@ import {GET_CHARACTER} from "../../graphql/query/Character.ts";
 import {Link, useParams} from "react-router-dom";
 import {Breadcrumbs, Skeleton, Typography} from "@mui/material";
 import {ROUTE} from "../../constants/route.constant.ts";
+import {TextHelper} from "../../helpers/TextHelper.ts";
+
 
 function DetailCharacter() {
+    const helper = new TextHelper()
     const id: number = parseInt(useParams().id || '1')
     const {loading, data} = useQuery(GET_CHARACTER, {variables: {id: id}})
 
@@ -14,10 +17,11 @@ function DetailCharacter() {
         <>
             <Breadcrumbs aria-label="breadcrumb" className={'mb-8 p-8'}>
                 <Link to={ROUTE.HOME()}>
-                    Home
+                    {helper.toCapitalize('home')}
                 </Link>
                 <Typography color="text.primary">{loading ?
-                    <Skeleton variant="text" height={28} width={160}/> : data?.character.name}</Typography>
+                    <Skeleton variant="text" height={28}
+                              width={160}/> : helper.toCapitalize(data?.character.name)}</Typography>
             </Breadcrumbs>
             <div className={'flex justify-center items-center w-full h-screen'}>
                 <CardCharacter loading={loading} created={data?.character.created} episode={data?.character.episode}
